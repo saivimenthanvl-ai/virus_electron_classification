@@ -1,0 +1,14 @@
+image size
+1376;1032
+particleposition
+285;177
+338;364
+particleposition
+970;363
+827;540
+particleposition
+1151;609
+1127;822
+particleposition
+439;602
+575;774

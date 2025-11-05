@@ -1,0 +1,5 @@
+image size
+1376;1032
+particleposition
+534;401
+558;626
