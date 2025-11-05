@@ -29,6 +29,30 @@ The clinical severity escalates with comorbidities such as advanced age, chronic
 - 🚀 **Deployment & Future Directions:**  
   Efficient deployment at the point of care is becoming possible with edge devices and federated learning. Continued validation and global multi-center studies are critical for improving outcomes.
 
+## 🦠 Virus Architecture & Protein Function
+
+- ![hMPV Virus Structure](Screenshot-2025-10-09-181959.jpg)  
+  *Molecular description of human metapneumovirus (hMPV) and the role viral proteins play in evasion of the immune response.*
+
+- 🌟 **Viral Proteins Overview:**  
+  - **G protein (purple):** Inhibits the host interferon (IFN) pathway and innate immunity, helping the virus hide from early immune defenses.
+  - **SH protein (blue):** Targets the IFN pathway and inhibits the production of Type I IFN, further weakening the body's immediate viral response.
+
+- 🏛️ **Internal Proteins:**  
+  - **F protein:** Enables fusion between the viral and host cell membranes, downregulates Type I IFN, and contains an RGD motif for integrin interaction, which assists entry and modulates immune activity.
+  - **P, M, M2.2, L proteins:** Vital for viral replication and RNA synthesis within infected cells.
+  - Certain proteins (M2.1 and palP7) are expressed only during the active replicative cycle.
+
+- 📜 **Genome Organization:**  
+  - The linear RNA genome encodes these proteins in specific sequence order:  
+    `3′ N—P—M—F—M2—SH—G—L 5′`
+
+- 🔒 **Immune Evasion Functions:**  
+  - **G protein:** Blocks both IFN and general innate pathways.
+  - **M2.2 protein:** Targets MAVS to interfere with antiviral signaling; recruits neutrophils.
+  - **SH protein:** Halts host antiviral responses.
+  - **F protein:** Interacts via RGD motif with host cell integrins, facilitating infection and modulating immunity.
+
 
 ## 📚 References
 
@@ -44,4 +68,3 @@ The clinical severity escalates with comorbidities such as advanced age, chronic
 - [NCBI – Human Metapneumovirus]
 
 - Read the full article: [HMPV Virus on Medium](https://medium.com/@saivimenthanvl/hmpv-virus-177aad08d84a)
-
