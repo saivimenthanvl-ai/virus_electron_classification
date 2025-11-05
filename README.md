@@ -1,4 +1,3 @@
-# HMPV-Virus
 ![HMPV Virus](HMPV-Virus.jpg)
 
 # 🦠 Human Metapneumovirus (HMPV): AI-Powered Diagnosis & Immune Evasion
