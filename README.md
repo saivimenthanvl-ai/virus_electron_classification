@@ -31,7 +31,7 @@ The clinical severity escalates with comorbidities such as advanced age, chronic
 
 ## 🦠 Virus Architecture & Protein Function
 
-- ![hMPV Virus Structure](HMPV Virus.png)
+- ![HMPV Virus]
   *Molecular description of human metapneumovirus (hMPV) and the role viral proteins play in evasion of the immune response.*
 
 - 🌟 **Viral Proteins Overview:**  
