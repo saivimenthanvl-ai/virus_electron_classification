@@ -29,29 +29,30 @@ The clinical severity escalates with comorbidities such as advanced age, chronic
 - 🚀 **Deployment & Future Directions:**  
   Efficient deployment at the point of care is becoming possible with edge devices and federated learning. Continued validation and global multi-center studies are critical for improving outcomes.
 
-## 🦠 Virus Architecture & Protein Function
+## 🦠 Human Metapneumovirus (HMPV) Structure and Immune Evasion
 
-- ![HMPV Virus]
-  *Molecular description of human metapneumovirus (hMPV) and the role viral proteins play in evasion of the immune response.*
+![HMPV Virus](HMPV-Virus.jpg)
 
-- 🌟 **Viral Proteins Overview:**  
-  - **G protein (purple):** Inhibits the host interferon (IFN) pathway and innate immunity, helping the virus hide from early immune defenses.
-  - **SH protein (blue):** Targets the IFN pathway and inhibits the production of Type I IFN, further weakening the body's immediate viral response.
+- **Central Structure:**  
+  The illustration shows the human metapneumovirus (hMPV) particle. The green spiral represents its RNA genome, which is surrounded by various viral and internal proteins embedded in the viral envelope.
 
-- 🏛️ **Internal Proteins:**  
-  - **F protein:** Enables fusion between the viral and host cell membranes, downregulates Type I IFN, and contains an RGD motif for integrin interaction, which assists entry and modulates immune activity.
-  - **P, M, M2.2, L proteins:** Vital for viral replication and RNA synthesis within infected cells.
-  - Certain proteins (M2.1 and palP7) are expressed only during the active replicative cycle.
+- **Viral Proteins (Surface):**  
+  - *G protein (purple):* Inhibits interferon (IFN) pathway and blocks innate immune responses, helping the virus evade detection.
+  - *SH protein (blue):* Suppresses IFN signaling and inhibits the host's Type I IFN production.
 
-- 📜 **Genome Organization:**  
-  - The linear RNA genome encodes these proteins in specific sequence order:  
-    `3′ N—P—M—F—M2—SH—G—L 5′`
+- **Internal Proteins:**  
+  - *F protein:* Facilitates fusion of the virus with host cell membranes and downregulates Type I IFN, aiding in viral entry and immune escape. Also contains RGD motif for interaction with host integrins.
+  - *P, M, M2.2, L proteins:* Essential for replication and RNA synthesis during the viral cycle.  
+  - Proteins M2.1 and palP7 are only expressed during active replication.
 
-- 🔒 **Immune Evasion Functions:**  
-  - **G protein:** Blocks both IFN and general innate pathways.
-  - **M2.2 protein:** Targets MAVS to interfere with antiviral signaling; recruits neutrophils.
-  - **SH protein:** Halts host antiviral responses.
-  - **F protein:** Interacts via RGD motif with host cell integrins, facilitating infection and modulating immunity.
+- **Genome Layout:**  
+  - The RNA genome is organized: `3′ N—P—M—F—M2—SH—G—L 5′`, encoding all the above proteins for replication and immune evasion.
+
+- **Roles in Immune Evasion:**  
+  - *G protein:* Inhibits IFN and innate immunity pathways.
+  - *M2.2 protein:* Disrupts MAVS signaling, recruits neutrophils.
+  - *SH protein:* Halts antiviral responses.
+  - *F protein:* Interacts with host cell integrins, facilitating immune modulation and infection.
 
 
 ## 📚 References
