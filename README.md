@@ -1,4 +1,5 @@
 # HMPV-Virus
+![HMPV Virus](HMPV-Virus.jpg)
 
 # 🦠 Human Metapneumovirus (HMPV): AI-Powered Diagnosis & Immune Evasion
 
@@ -30,9 +31,6 @@ The clinical severity escalates with comorbidities such as advanced age, chronic
   Efficient deployment at the point of care is becoming possible with edge devices and federated learning. Continued validation and global multi-center studies are critical for improving outcomes.
 
 ## 🦠 Human Metapneumovirus (HMPV) Structure and Immune Evasion
-
-![HMPV Virus](HMPV-Virus.jpg)
-
 - **Central Structure:**  
   The illustration shows the human metapneumovirus (hMPV) particle. The green spiral represents its RNA genome, which is surrounded by various viral and internal proteins embedded in the viral envelope.
 
