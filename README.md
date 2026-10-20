@@ -2,11 +2,11 @@
 
 # Virus Electron Microscopy Classification
 
-Transfer-learning experiments for classifying virus electron-microscopy (TEM) images, plus background reading on human metapneumovirus (HMPV). The notebook is still named `HMPV_Virus.ipynb`.
+Transfer-learning experiments for classifying virus electron-microscopy (TEM) images, plus background reading on human metapneumovirus (HMPV).
 
 ## What this repository contains
 
-- **`HMPV_Virus.ipynb`**: transfer-learning experiments on the small local sample of virus electron-microscopy (TEM) images in this repo: **Adenovirus (14), Cowpox (10) and Dengue (7), 31 micrographs in total**. Run it from the repo root.
+- **`virus_electron_microscopy_classification.ipynb`**: transfer-learning experiments on the small local sample of virus electron-microscopy (TEM) images in this repo: **Adenovirus (14), Cowpox (10) and Dengue (7), 31 micrographs in total**. Run it from the repo root.
 - **`Adenovirus/`, `Cowpox/`, `Dengue/`**: that sample. The full source dataset has 22 virus classes (Adenovirus, Astrovirus, CCHF, Cowpox, Dengue, Ebola, Guanarito, Influenza, LCM, Lassa, Machupo, Marburg, Nipah virus, Norovirus, Orf, Papilloma, Pseudocowpox, Rift Valley, Rotavirus, Sapovirus, TBE and West Nile). **HMPV is not one of the classes**, and nothing here classifies HMPV or chest images.
 - The sections further down are background reading on HMPV biology and AI in respiratory diagnostics, adapted from the linked Medium article. They are not results from this repository.
 
