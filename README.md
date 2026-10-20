@@ -27,11 +27,29 @@ All models are ImageNet-pretrained backbones with a small classification head, i
 
 The EfficientNetB0 + LSTM model is stuck at 10.48% (26 of 248 validation images, i.e. it predicts one class) and did not learn. Training accuracy for the fine-tuned MobileNetV2 run is about 52-55% (with dropout and augmentation active) against about 44% validation, so even the best model is weak rather than just overfit.
 
-- **No test-set result exists.** The `evaluate_model` calls are commented out, so no test accuracy, confusion matrix or AUC was produced.
+- **No test-set result exists yet.** The `evaluate_model` calls in the notebook are commented out, so no test accuracy, confusion matrix, or AUC was produced during the initial training run.
+- **Running test evaluation in Colab:**
+  To evaluate any trained model on the 252 test micrographs:
+  1. Remove augmentation from `test_gen` and set `shuffle=False` on `test_ds`:
+     ```python
+     test_gen = ImageDataGenerator(preprocessing_function=preprocess_input)
+     test_ds = test_gen.flow_from_directory(
+         test_dir,
+         target_size=IMG_SIZE,
+         batch_size=BATCH_SIZE,
+         class_mode='categorical',
+         shuffle=False
+     )
+     ```
+  2. Set `CLASS_NAMES` and invoke `evaluate_model`:
+     ```python
+     CLASS_NAMES = list(test_ds.class_indices.keys())
+     evaluate_model(model, "MobileNetV2 Fine-Tuned")
+     ```
 - **Earlier claims removed.** A previous version of this README stated ">95% accuracy". The notebook does not support that figure and it has been removed.
 - **The UNet cell is a shape demo only.** It is trained for 5 epochs on random noise tensors (`tf.random.normal`) with random masks; it is not trained on this dataset and produces no segmentation result.
 - **Known issues.**
-  - Validation and test generators use `shuffle=True`, and the test generator applies training augmentation, so a future test evaluation should set `shuffle=False` and remove augmentation.
+  - Validation and test generators use `shuffle=True`, and the test generator applies training augmentation, so a future test evaluation should set `shuffle=False` and remove augmentation as shown above.
   - `plot_history` contains an indented `model.fit(...)` call, so calling it retrains the global `model` for 10 more epochs before plotting.
   - `predict_image` uses `load_img` and `img_to_array`, which are never imported, and it rescales by 1/255 while the models were trained with `preprocess_input`. The data split is made outside the notebook, so leakage between splits cannot be checked from this repo.
 
