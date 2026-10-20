@@ -1,6 +1,8 @@
 ![HMPV Virus](images.jpg)
 
-# 🦠 Human Metapneumovirus (HMPV): AI-Powered Diagnosis & Immune Evasion
+# Virus Electron Microscopy Classification
+
+Transfer-learning experiments for classifying virus electron-microscopy (TEM) images, plus background reading on human metapneumovirus (HMPV). The notebook is still named `HMPV_Virus.ipynb`.
 
 ## What this repository contains
 
@@ -23,11 +25,31 @@ Each micrograph in the dataset is stored as **three files**: the image (`.tif`),
 
 ### Results
 
-**Pending.** The notebook has been rewritten as described above and has not been run since. No accuracy is claimed for it. Run it and the printed test accuracies and cross-validated accuracy will be added here.
+One run of the current notebook on the 31-image sample (TensorFlow 2.20, Keras 3.13, CPU, seed 42). TensorFlow is not fully deterministic, so a re-run can differ slightly. Split: 18 train, 6 validation, 7 test images.
 
-How to read the numbers when they exist: a 7-image test set cannot distinguish models (one image is about 14 points, and the 95% interval for a perfect 7 of 7 still starts near 65%), and the 31-image cross-validation is the more trustworthy figure. Chance level for 3 classes is about 33% (about 45% if always predicting Adenovirus).
+| Model | Epochs run | Best epoch | Val. accuracy (6 images) | Test accuracy (7 images, 95% interval) |
+|---|---|---|---|---|
+| MobileNetV2, last 30 layers fine-tuned | 7 | 2 | 83.3% (5/6) | 57.1% (4/7), 25-84% |
+| MobileNetV2, frozen | 15 | 10 | 83.3% (5/6) | 42.9% (3/7), 16-75% |
+| ResNet-50, frozen | 23 | 18 | 83.3% (5/6) | 42.9% (3/7), 16-75% |
+| EfficientNetB0 + LSTM, frozen | 18 | 13 | 83.3% (5/6) | 42.9% (3/7), 16-75% |
 
-The previous local run of this notebook scored 40% (2 of 5) on 5 validation images for every model, and its "test" generator used those same 5 images, so that run showed nothing and is superseded.
+**Cross-validated estimate** (logistic-regression probe on frozen MobileNetV2 features, stratified 5-fold, every image scored once by a model that never saw it): **20 of 31 correct = 64.5%, 95% interval 47-79%**.
+
+| Class | Precision | Recall | Images |
+|---|---|---|---|
+| Adenovirus | 0.62 | 0.93 | 14 |
+| Cowpox | 0.70 | 0.70 | 10 |
+| Dengue | 0.00 | 0.00 | 7 |
+| Macro average | 0.44 | 0.54 (F1 0.48) | 31 |
+
+How to read this:
+
+- **The models cannot be told apart.** Every model has the same validation score on 6 images, and the 7-image test intervals overlap almost completely. Do not rank the models from these numbers.
+- **The cross-validated figure is the one to trust,** and it is modest: 64.5% against 45% for always predicting Adenovirus (14 of 31), with an interval (47-79%) that only just clears that baseline.
+- **Dengue is not recognised at all.** It scores 0 of 7 in cross-validation and 0 of 2 in the test split, so the model effectively separates only Adenovirus from Cowpox.
+- **Possible leakage.** File names such as `A4-65k-071120_12` suggest several micrographs per specimen and session. The splits are by file, so near-identical images may sit on both sides of a split, which would make the scores optimistic. The dataset has no specimen IDs to check this.
+- **Very small sample.** 31 images from 3 of the 22 source classes say nothing about the full dataset or about clinical use.
 
 ### What changed from the earlier notebook
 
@@ -59,6 +81,8 @@ An earlier version of the notebook (kept in the git history, commit `a4d1425`) t
   ```
 - An even earlier README stated ">95% accuracy". That figure was never supported by any notebook output and has been removed.
 - That version also had bugs now fixed or removed: `plot_history` contained an indented `model.fit(...)` call, and `predict_image` rescaled by 1/255 instead of using `preprocess_input`.
+
+## Background: Human Metapneumovirus (HMPV)
 
 - 🚨 **Overview:**  
 Human metapneumovirus (HMPV) is a leading cause of upper and lower respiratory tract infections. It poses a serious threat to children, the elderly, and immunocompromised individuals.
