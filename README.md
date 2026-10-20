@@ -4,19 +4,42 @@
 
 ## What this repository contains
 
-- **`HMPV_Virus.ipynb`**: image-classification experiments on a **22-class virus electron-microscopy (TEM) image dataset**. The classes are Adenovirus, Astrovirus, CCHF, Cowpox, Dengue, Ebola, Guanarito, Influenza, LCM, Lassa, Machupo, Marburg, Nipah virus, Norovirus, Orf, Papilloma, Pseudocowpox, Rift Valley, Rotavirus, Sapovirus, TBE and West Nile. **HMPV is not one of the classes**, and the notebook does not classify HMPV or chest images.
-- **`Adenovirus/`, `Cowpox/`, `Dengue/`**: a small sample (31 micrographs) of 3 of the 22 classes.
+- **`HMPV_Virus.ipynb`**: transfer-learning experiments on the small local sample of virus electron-microscopy (TEM) images in this repo: **Adenovirus (14), Cowpox (10) and Dengue (7), 31 micrographs in total**. Run it from the repo root.
+- **`Adenovirus/`, `Cowpox/`, `Dengue/`**: that sample. The full source dataset has 22 virus classes (Adenovirus, Astrovirus, CCHF, Cowpox, Dengue, Ebola, Guanarito, Influenza, LCM, Lassa, Machupo, Marburg, Nipah virus, Norovirus, Orf, Papilloma, Pseudocowpox, Rift Valley, Rotavirus, Sapovirus, TBE and West Nile). **HMPV is not one of the classes**, and nothing here classifies HMPV or chest images.
 - The sections further down are background reading on HMPV biology and AI in respiratory diagnostics, adapted from the linked Medium article. They are not results from this repository.
 
 ### Dataset and why the file counts differ
 
-Each micrograph in the dataset is stored as **three files**: the image (`.tif`), a particle-position file (`<name>_particlepositions.txt`) and a tag file (`<name>.tif_tags.csv`). The sample here shows the pattern: 31 images, 31 position files and 31 tag files. A file listing of the dataset therefore counts about **three times** the number of images (for example, 852 images would appear as 2,556 files). The notebook uses **only the `.tif` images**; the position and tag files are never read.
+Each micrograph in the dataset is stored as **three files**: the image (`.tif`), a particle-position file (`<name>_particlepositions.txt`) and a tag file (`<name>.tif_tags.csv`). The sample here shows the pattern: 31 images, 31 position files and 31 tag files. A file listing of the dataset therefore counts about **three times** the number of images (for example, 852 images would appear as 2,556 files). The notebook uses **only the image files**; the position and tag files are never read.
 
-The notebook trains from a pre-split copy on Google Drive (`/content/drive/MyDrive/Virus/{train,validation,test}`), which it reports as **745 train, 248 validation and 252 test images (1,245 in total) across 22 classes**.
+## Current notebook (3-class local sample)
 
-### Experiments and what they show
+| Step | What it does |
+|---|---|
+| Split | One stratified 60 / 20 / 20 split of the image files into 18 train, 6 validation and 7 test images, with an assertion that no file appears in two sets |
+| Training | Four ImageNet-pretrained models: MobileNetV2 (last 30 layers fine-tuned), MobileNetV2 (frozen), ResNet-50 (frozen), EfficientNetB0 + LSTM (frozen). Augmentation on training only, each model with its own `preprocess_input`, early stopping on validation loss |
+| Test evaluation | Every model is evaluated on the held-out test images (no augmentation, `shuffle=False`) with accuracy, a 95% Wilson interval, and for MobileNetV2 (frozen) a classification report and confusion matrix |
+| Cross-validation | Stratified 5-fold cross-validation of a logistic-regression probe on frozen MobileNetV2 features, so all 31 images are scored by a model that never saw them |
 
-All models are ImageNet-pretrained backbones with a small classification head, input 224 x 224, batch size 32, up to 30 epochs with early stopping on validation loss (patience 5, best weights restored). With 22 classes, random guessing is about 4.5%. Figures are from the full training logs.
+### Results
+
+**Pending.** The notebook has been rewritten as described above and has not been run since. No accuracy is claimed for it. Run it and the printed test accuracies and cross-validated accuracy will be added here.
+
+How to read the numbers when they exist: a 7-image test set cannot distinguish models (one image is about 14 points, and the 95% interval for a perfect 7 of 7 still starts near 65%), and the 31-image cross-validation is the more trustworthy figure. Chance level for 3 classes is about 33% (about 45% if always predicting Adenovirus).
+
+The previous local run of this notebook scored 40% (2 of 5) on 5 validation images for every model, and its "test" generator used those same 5 images, so that run showed nothing and is superseded.
+
+### What changed from the earlier notebook
+
+- The test set was the same 5 images as validation; images are now split once into disjoint train, validation and test sets.
+- ResNet-50 and EfficientNet were fed MobileNetV2-preprocessed images; each model now uses its own `preprocess_input`.
+- The `evaluate_model` calls were commented out; all models are now evaluated on the test set.
+- Added 5-fold cross-validation, because a single 7-image test set is too small to trust.
+- Removed the UNet cell, which was trained on random noise (`tf.random.normal`) and produced no segmentation result.
+
+## Earlier 22-class run (Google Colab)
+
+An earlier version of the notebook (kept in the git history, commit `a4d1425`) trained on a pre-split Google Drive copy of the full dataset: **745 train, 248 validation and 252 test images (1,245 in total) across 22 classes**. Random guessing there is about 4.5%. Figures are from its full training logs.
 
 | Model | Epochs run | Best epoch (lowest val. loss, weights restored) | Val. accuracy at best epoch | Peak val. accuracy |
 |---|---|---|---|---|
@@ -25,33 +48,17 @@ All models are ImageNet-pretrained backbones with a small classification head, i
 | ResNet-50, frozen | 30 (ran to the limit) | 29 (loss 2.546) | 21.77% | 23.39% |
 | EfficientNetB0 + LSTM, frozen | 11 | 6 (loss 2.925) | 10.48% | 10.48% |
 
-The EfficientNetB0 + LSTM model is stuck at 10.48% (26 of 248 validation images, i.e. it predicts one class) and did not learn. Training accuracy for the fine-tuned MobileNetV2 run is about 52-55% (with dropout and augmentation active) against about 44% validation, so even the best model is weak rather than just overfit.
-
-- **No test-set result exists yet.** The `evaluate_model` calls in the notebook are commented out, so no test accuracy, confusion matrix, or AUC was produced during the initial training run.
-- **Running test evaluation in Colab:**
-  To evaluate any trained model on the 252 test micrographs:
-  1. Remove augmentation from `test_gen` and set `shuffle=False` on `test_ds`:
-     ```python
-     test_gen = ImageDataGenerator(preprocessing_function=preprocess_input)
-     test_ds = test_gen.flow_from_directory(
-         test_dir,
-         target_size=IMG_SIZE,
-         batch_size=BATCH_SIZE,
-         class_mode='categorical',
-         shuffle=False
-     )
-     ```
-  2. Set `CLASS_NAMES` and invoke `evaluate_model`:
-     ```python
-     CLASS_NAMES = list(test_ds.class_indices.keys())
-     evaluate_model(model, "MobileNetV2 Fine-Tuned")
-     ```
-- **Earlier claims removed.** A previous version of this README stated ">95% accuracy". The notebook does not support that figure and it has been removed.
-- **The UNet cell is a shape demo only.** It is trained for 5 epochs on random noise tensors (`tf.random.normal`) with random masks; it is not trained on this dataset and produces no segmentation result.
-- **Known issues.**
-  - Validation and test generators use `shuffle=True`, and the test generator applies training augmentation, so a future test evaluation should set `shuffle=False` and remove augmentation as shown above.
-  - `plot_history` contains an indented `model.fit(...)` call, so calling it retrains the global `model` for 10 more epochs before plotting.
-  - `predict_image` uses `load_img` and `img_to_array`, which are never imported, and it rescales by 1/255 while the models were trained with `preprocess_input`. The data split is made outside the notebook, so leakage between splits cannot be checked from this repo.
+- EfficientNetB0 + LSTM is stuck at 10.48% (26 of 248 validation images, i.e. it predicts one class) and did not learn. The fine-tuned MobileNetV2 reached about 52-55% training accuracy (with dropout and augmentation) against about 44% validation, so even the best model is weak.
+- **No test result exists for the 22-class run.** Its `evaluate_model` calls were commented out and its test generator used augmentation with `shuffle=True`. To obtain one, build the test generator without augmentation and with `shuffle=False`:
+  ```python
+  test_gen = ImageDataGenerator(preprocessing_function=preprocess_input)
+  test_ds = test_gen.flow_from_directory(test_dir, target_size=IMG_SIZE, batch_size=BATCH_SIZE,
+                                         class_mode='categorical', shuffle=False)
+  CLASS_NAMES = list(test_ds.class_indices.keys())
+  evaluate_model(model, "MobileNetV2")
+  ```
+- An even earlier README stated ">95% accuracy". That figure was never supported by any notebook output and has been removed.
+- That version also had bugs now fixed or removed: `plot_history` contained an indented `model.fit(...)` call, and `predict_image` rescaled by 1/255 instead of using `preprocess_input`.
 
 - 🚨 **Overview:**  
 Human metapneumovirus (HMPV) is a leading cause of upper and lower respiratory tract infections. It poses a serious threat to children, the elderly, and immunocompromised individuals.
