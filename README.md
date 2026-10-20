@@ -16,19 +16,24 @@ The notebook trains from a pre-split copy on Google Drive (`/content/drive/MyDri
 
 ### Experiments and what they show
 
-All models are ImageNet-pretrained backbones with a small classification head, input 224 x 224, batch size 32, early stopping on validation loss. Figures below are validation accuracy from the notebook's saved training logs (the saved output is truncated, so these are the logged epochs, not necessarily the best epoch).
+All models are ImageNet-pretrained backbones with a small classification head, input 224 x 224, batch size 32, up to 30 epochs with early stopping on validation loss (patience 5, best weights restored). With 22 classes, random guessing is about 4.5%. Figures are from the full training logs.
 
-| Model | Logged validation accuracy |
-|---|---|
-| MobileNetV2 (fine-tuning last 30 layers) | about 42-45% |
-| MobileNetV2 (frozen) | about 42% |
-| ResNet-50 (frozen) | about 18-22% |
-| EfficientNetB0 + LSTM (frozen) | about 10% (not learning) |
+| Model | Epochs run | Best epoch (lowest val. loss, weights restored) | Val. accuracy at best epoch | Peak val. accuracy |
+|---|---|---|---|---|
+| MobileNetV2, last 30 layers fine-tuned (Adam 1e-4) | 24 | 19 (loss 1.768, AUC 0.906) | 43.95% | 46.77% |
+| MobileNetV2, frozen | 29 | 24 (loss 1.690) | 44.35% | 44.76% |
+| ResNet-50, frozen | 30 (ran to the limit) | 29 (loss 2.546) | 21.77% | 23.39% |
+| EfficientNetB0 + LSTM, frozen | 11 | 6 (loss 2.925) | 10.48% | 10.48% |
+
+The EfficientNetB0 + LSTM model is stuck at 10.48% (26 of 248 validation images, i.e. it predicts one class) and did not learn. Training accuracy for the fine-tuned MobileNetV2 run is about 52-55% (with dropout and augmentation active) against about 44% validation, so even the best model is weak rather than just overfit.
 
 - **No test-set result exists.** The `evaluate_model` calls are commented out, so no test accuracy, confusion matrix or AUC was produced.
 - **Earlier claims removed.** A previous version of this README stated ">95% accuracy". The notebook does not support that figure and it has been removed.
 - **The UNet cell is a shape demo only.** It is trained for 5 epochs on random noise tensors (`tf.random.normal`) with random masks; it is not trained on this dataset and produces no segmentation result.
-- **Known issues.** Validation and test generators use `shuffle=True`, and the test generator applies training augmentation, so a future test evaluation should set `shuffle=False` and remove augmentation. The data split is made outside the notebook, so leakage between splits cannot be checked from this repo.
+- **Known issues.**
+  - Validation and test generators use `shuffle=True`, and the test generator applies training augmentation, so a future test evaluation should set `shuffle=False` and remove augmentation.
+  - `plot_history` contains an indented `model.fit(...)` call, so calling it retrains the global `model` for 10 more epochs before plotting.
+  - `predict_image` uses `load_img` and `img_to_array`, which are never imported, and it rescales by 1/255 while the models were trained with `preprocess_input`. The data split is made outside the notebook, so leakage between splits cannot be checked from this repo.
 
 - 🚨 **Overview:**  
 Human metapneumovirus (HMPV) is a leading cause of upper and lower respiratory tract infections. It poses a serious threat to children, the elderly, and immunocompromised individuals.
